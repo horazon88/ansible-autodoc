@@ -11,11 +11,13 @@
 
 {% for key , values in r.get_multi_type("todo") %}
     {% if key != "_unset_" %}
-#### {{ r.capitalize(key) }}:
+#### <a name="todo_{{key}}"></a>{{ r.capitalize(key) }}:
         {% for item in values %}
-* {% if item.value %}{{ item.value }} - {% endif %}{{ item.desc }} {% if not r.is_role() %}({{ r.fprn(item.role) }}){% endif %}
+* {% if item.value %}{{ item.value }} - {% endif %}{{ item.desc }} {% if not r.is_role() %}({{ r.fprn(item.file) }}){% endif %}
 
         {% endfor %}
     {%  endif %}
+  
 {%  endfor %}
+
 {%  endif %}

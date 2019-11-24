@@ -35,7 +35,7 @@ notes:
 
 Use the following annotations in your playbooks and roles
 
-* __meta:__ use @meta to annotate the metadata of playbook or role, like author
+* __meta:__ use @meta to annotate the metadata of main playbook or role, like author
 check below list of useful metadata
   * author: (self explanatory)
   * description: playbook / role description
@@ -51,6 +51,10 @@ check below list of useful metadata
 ```yaml
 # @todo bug: bug description
 # @todo improvement: improvement 
+```
+* _playbook:_ use @playbook to annotate playbook. It uses additional variables like
+```yaml
+# @playbook Playbook name: This line describes what playbook does
 ```
 
 * __action:__ use @action to annotate a actions performed by the playbook/role

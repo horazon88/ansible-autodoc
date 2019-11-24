@@ -1,11 +1,13 @@
-# {%  if r.is_role() %}Ansible Role:{% endif %} {% if r.get_item("meta","role_name") %}{{ r.get_item("meta","role_name").value }}
-{% else %}{{  r.get_name() }}{% endif %}
-
+# {%  if r.is_role() %}Ansible Role:{% endif %} {% if r.get_item("meta","role_name") %}{{ r.get_item("meta","role_name").value }}{% else %}{{  r.get_name() }}{% endif %}
 
 {% if r.get_item("meta","description") %}
 {{ r.capitalize(r.get_item("meta","description").value) +" "+ r.get_item("meta","description").desc }}
 {% endif %}
 {{ r.include("_after_description.md") }}
+{#      TOC     #}
+{% include '_toc.j2'  %}
+{#      Playbooks     #}
+{% include '_playbooks.j2'  %}
 {#      Actions     #}
 {% include '_action.j2'  %}
 {#      Tags      #}
@@ -27,7 +29,3 @@
 This {%  if r.is_role() %}role:{% else %}playbook{% endif %}  was created by: {{ r.capitalize(r.get_item("meta","author").value) }}
 {% if r.get_item("meta","email")  %}{{ r.capitalize(r.get_item("meta","email").value) }}{% endif %}
 {% endif %}
-
-{{ r.about() }}
-
-

@@ -54,6 +54,9 @@ class Parser:
             roles.remove(PLAYBOOK_ROLE_NAME)
         return roles
 
+    def get_playbooks(self):
+        return list (self._annotation_objs["playbook"].get_details()["playbook_items"].keys())
+
     def include(self,filename):
         base =self.config.get_base_dir()
         base += "/"+filename
@@ -85,6 +88,8 @@ class Parser:
 
             if role == "all":
                 r_data = data["all"]
+            elif role == "playbook":
+                r_data = data["playbook_items"]
             elif role in data["role_items"].keys():
                 r_data = data["role_items"][role]
             elif role == "play" and PLAYBOOK_ROLE_NAME in data["role_items"].keys():

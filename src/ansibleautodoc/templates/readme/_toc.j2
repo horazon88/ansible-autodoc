@@ -1,0 +1,45 @@
+{#      Playbooks      #}
+{% if r.has_items("playbook", "playbook") %}
+* [Playbooks](#playbooks)
+{% for _obj in r.get_type("playbook", "playbook") %}
+  {% for _item in _obj.keys() %}
+    {% set play = _obj.get(_item) %}
+  - [{{ play.key}}](#playbook_{{play.file}})
+  {% endfor %}
+{% endfor %}
+{% endif %}
+{#      Actions        #}
+{% if r.has_items("action") %}
+* [Actions](#actions)
+{#
+  {%  for role in r.get_roles(False) %}
+    {% if r.get_type("action",role)  %}
+  - [{{r.capitalize(r.fprn(role))}}](#role_{{r.fprn(role)}})
+    {% endif %}
+  {%  endfor %}
+#}
+{% endif %}
+{#      Tags           #}
+{% if r.has_items("tag") %}
+* [Tags](#tags)
+{% endif %}
+{#      Variables      #}
+{% if r.has_items("var") %}
+* [Variables](#variables)
+  {% for role in r.get_roles(False) %}
+    {% if  r.get_type("var",role) %}
+  - [{{ r.capitalize(r.fprn(role)) }}](#var_{{r.fprn(role)}})
+    {% endif %}
+  {% endfor %}
+{% endif %}
+{#       TODO          #}
+{% if r.has_items("todo") %}
+* [Todo](#todo)
+  {% for key , values in r.get_multi_type("todo") %}
+    {% if key != "_unset_" %}
+  - [{{r.capitalize(key)}}](#todo_{{key}})
+    {% endif %}
+  {% endfor %}
+{% endif %}
+  
+

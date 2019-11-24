@@ -122,7 +122,12 @@ excluded_roles_dirs: []
         },
         "meta": { # @meta: author # <name>
             "name": "meta",
-            "automatic":True
+            "automatic":True,
+        },
+        "playbook": { # @playbook: name # <description>
+            "name": "playbook",
+            "automatic":True,
+            "allow_multiple": False,
         },
         "todo": {
             "name": "todo",

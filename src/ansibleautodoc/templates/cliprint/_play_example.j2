@@ -1,0 +1,11 @@
+#### Examples:
+{% for _example in play.example %}
+{% if  _example.key is defined and _example.key != "_unset_" %}**{{ _example.key }}**{% endif %}
+{% if  _example.value is defined and _example.value != "" %}  - {{ _example.value }}{% endif %}
+
+```yaml
+{{ _example.desc }}
+```
+
+{% endfor %}
+

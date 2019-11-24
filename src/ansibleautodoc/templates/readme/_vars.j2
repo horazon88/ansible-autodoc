@@ -11,12 +11,14 @@
 
 {% for role in r.get_roles(False) %}
     {% if  r.get_type("var",role) %}
-### {{ r.capitalize(r.fprn(role)) }}:
+### <a name="var_{{r.fprn(role)}}"></a>{{ r.capitalize(r.fprn(role)) }}:
     {% endif %}
     {% for item in  r.get_type("var",role) %}
-* `{{ item.key }}`: `{{item.value }}` - {{ item.desc }}
+* `{{ item.key }}`: `{{item.value }}` - {{ item.desc }}  
     {%  endfor %}
+
 {% endfor %}
-{% endif %}
+
 {% endif %}
 
+{% endif %}

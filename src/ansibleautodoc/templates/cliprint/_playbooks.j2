@@ -1,0 +1,15 @@
+# ============================================================
+# Playbooks (variables: playbook)
+# ============================================================
+{% for _obj in r.get_type("playbook", "playbook") %}
+  {% for _item in _obj.keys() %}
+    {% set play = _obj.get(_item) %}
+Playbook: {{ play.key }}
+File: {{ play.file }}
+{{ play.value }}
+      {% if play.desc != "" %}
+{{ play.desc }}  
+      {% endif %}
+{%  if play.example %}{% include '_play_example.j2'  %}{% endif %}
+  {% endfor %}
+{% endfor %}

@@ -7,6 +7,7 @@ import pprint
 from ansibleautodoc.Utils import SingleLog
 from ansibleautodoc.Config import SingleConfig
 from ansibleautodoc.FileRegistry import Registry
+from ansibleautodoc.Contstants import *
 
 
 class AnnotationItem:
@@ -16,6 +17,7 @@ class AnnotationItem:
     desc = ""  # annotation longer description
     role = ""  # associated role
     file = ""  # file of the annotation
+    name = "" # identifies tag name
     line = ""  # line of the annotation
     example = ""  # add an example item iof defined: @example
 
@@ -27,6 +29,7 @@ class AnnotationItem:
         s += "desc: "+self.desc+", "
         s += "role: "+self.role+", "
         s += "file: "+self.file+", "
+        s += "name: "+self.name+", "
         s += "line: "+self.line+" "
         s += "line: "+self.example+" "
         s += "}"
@@ -39,6 +42,7 @@ class AnnotationItem:
             "desc": self.desc,
             "role": self.role,
             "file": self.file,
+            "name": self.name,
             "line": self.line,
             "example": self.example,
         }
@@ -60,6 +64,7 @@ class Annotation:
     _all_items = {}
     _duplucate_items = {}
     _role_items = {}
+    _playbook_items = {}
 
     def __init__(self,name,files_registry):
         self.config = SingleConfig()
@@ -81,6 +86,7 @@ class Annotation:
             self._role_items = {}
             self._all_items = {}
             self._duplucate_items = {}
+            self._playbook_items = {}
 
         if self._annotation_definition is not None:
             self._find_annotation()
@@ -94,6 +100,7 @@ class Annotation:
             "all": self._all_items,
             "duplicates": self._duplucate_items,
             "role_items": self._role_items,
+            "playbook_items": self._playbook_items,
         }
 
     def _find_annotation(self):
@@ -139,6 +146,16 @@ class Annotation:
 
             self._role_items[item.role][item.key].append(item.get_obj())
 
+        elif item.role == PLAYBOOK_ROLE_NAME and item.name != "meta" and item.name != "tag":
+            # Playbook items
+            if item.file not in self._playbook_items.keys():
+                self._playbook_items[item.file] = {}
+
+            if item.key not in self._playbook_items[item.file].keys():
+                self._playbook_items[item.file][item.key] = []
+
+            self._playbook_items[item.file][item.key] = (item.get_obj())
+
         else:
 
             if item.key not in self._all_items.keys():
@@ -179,6 +196,7 @@ class Annotation:
         # reg1 = "(\#\ *\@"++"\ *)"
         reg1 = "(\#\ *\@"+name+"\ *)"
         line1 = re.sub(reg1, '', line).strip()
+        item.name = name
 
         # print("line1: '"+line1+"'")
         # step2 split annotation and comment by #
@@ -238,31 +256,41 @@ class Annotation:
 
         # step5, check for @example
         example = ""
+        examples = []
 
-        if name != "example":
+#        if name != "example":
 
-            current_file_position = self._file_handler.tell()
-            example_regex = "(\#\ *\@example\ +.*)"
+        current_file_position = self._file_handler.tell()
+        example_regex = "(\#\ *\@example\ +.*)"
 
-            while True:
-                next_line = self._file_handler.readline()
-                if not next_line:
+        while True:
+            next_line = self._file_handler.readline()
+            # There is no next line
+            if not next_line:
+                self._file_handler.seek(current_file_position)
+                break
+
+            # exit if next annotation is not @example
+            if re.match(stars_with_annotation, next_line):
+                if "@example" not in next_line:
                     self._file_handler.seek(current_file_position)
                     break
 
-                # exit if next annotation is not @example
-                if re.match(stars_with_annotation, next_line):
-                    if "@example" not in next_line:
-                        self._file_handler.seek(current_file_position)
-                        break
+            if re.match(example_regex, next_line):
+                example = self._get_annotation_data(next_line,"example")
+                # pprint.pprint(example.get_obj())
+                self._file_handler.seek(current_file_position)
+                break
 
-                if re.match(example_regex, next_line):
-                    example = self._get_annotation_data(next_line,"example")
-                    # pprint.pprint(example.get_obj())
-                    self._file_handler.seek(current_file_position)
-                    break
         if example != "":
-            item.example = example.get_obj()
+            if example.example != "":
+                examples+=example.example
+            if name != "example":
+                examples.append(example.get_obj())
+                item.example = examples
+            else:
+                examples.append(example.get_obj())
+                item.example = examples
 
         return item
 
