@@ -1,7 +1,9 @@
-# {%  if r.is_role() %}Ansible Role:{% endif %} {% if r.get_item("meta","role_name") %}{{ r.get_item("meta","role_name").value }}{% else %}{{  r.get_name() }}{% endif %}
+# {% if r.is_role() %}Ansible Role:{% endif %}{% if r.get_item("meta","role_name") %}{{ r.get_item("meta","role_name").value }}{% else %}{{  r.get_name() }}{% endif %}
+
 
 {% if r.get_item("meta","description") %}
-{{ r.capitalize(r.get_item("meta","description").value) +" "+ r.get_item("meta","description").desc }}
+{{ r.capitalize(r.get_item("meta","description").value) }}{% if r.get_item("meta","description").desc != "" %} {{ r.get_item("meta","description").desc }}{% endif %}
+
 {% endif %}
 {{ r.include("_after_description.md") }}
 {#      TOC     #}
@@ -19,13 +21,18 @@
 {#      LICENSE      #}
 {% if r.get_item("meta","license") %}
 ## License
-{{ r.capitalize(r.get_item("meta","license").value) }}
-{{ r.capitalize(r.get_item("meta","license").desc) }}
+
+  {% if r.get_item("meta","license").value != "_unset_" %}{{ r.capitalize(r.get_item("meta","license").value) }}{% endif %}
+  {% if r.get_item("meta","license").desc != "_unset_" %}{{ r.capitalize(r.get_item("meta","license").desc) }}{% endif %}
+  {% if r.get_item("meta","license").value != "_unset_" %}
+
+  {% endif %}
 {% endif %}
 
 {#      Author information      #}
 {% if r.get_item("meta","author") %}
 ## Author Information
+
 This {%  if r.is_role() %}role:{% else %}playbook{% endif %}  was created by: {{ r.capitalize(r.get_item("meta","author").value) }}
 {% if r.get_item("meta","email")  %}{{ r.capitalize(r.get_item("meta","email").value) }}{% endif %}
 {% endif %}

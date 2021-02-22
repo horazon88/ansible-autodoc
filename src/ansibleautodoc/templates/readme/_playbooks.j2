@@ -1,15 +1,17 @@
-{% if r.has_items("playbook", "playbook") %}## Playbooks:
+{% if r.has_items("playbook", "playbook") %}## Playbooks
 
-{% for _obj in r.get_type("playbook", "playbook") %}
-  {% for _item in _obj.keys() %}
-    {% set play = _obj.get(_item) %}
-### <a name="playbook_{{play.file}}"></a>{{ play.key}}
-{{ play.value }}
-      {% if play.desc != "" %}
-{{ play.desc }}  
-      {% endif %}
-{%  if play.example %}{% include '_play_example.j2'  %}{% endif %}
-  {% endfor %}
+    {% for _obj in r.get_type("playbook", "playbook") %}
+        {% for _item in _obj.keys() %}
+            {% set play = _obj.get(_item) %}
+### {{ play.key}}
 
-{% endfor %}
+            {% if play.value != "" %}{{ play.value}}{% endif %}
+            {% if play.desc != "" %}{{ play.desc }}{% endif %}
+
+            {%  if play.example %}
+
+                {% include '_play_example.j2' %}
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
 {% endif %}

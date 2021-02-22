@@ -4,7 +4,7 @@
 {% for _obj in r.get_type("playbook", "playbook") %}
   {% for _item in _obj.keys() %}
     {% set play = _obj.get(_item) %}
-  - [{{ play.key}}](#playbook_{{play.file}})
+  - [{{ play.key}}](#{{play.key.lower().replace(' ','-')}})
   {% endfor %}
 {% endfor %}
 {% endif %}
@@ -14,7 +14,7 @@
 {#
   {%  for role in r.get_roles(False) %}
     {% if r.get_type("action",role)  %}
-  - [{{r.capitalize(r.fprn(role))}}](#role_{{r.fprn(role)}})
+  - [{{r.capitalize(r.fprn(role))}}](#{{r.fprn(role).lower().replace(' ','-')}})
     {% endif %}
   {%  endfor %}
 #}
@@ -28,7 +28,7 @@
 * [Variables](#variables)
   {% for role in r.get_roles(False) %}
     {% if  r.get_type("var",role) %}
-  - [{{ r.capitalize(r.fprn(role)) }}](#var_{{r.fprn(role)}})
+  - [{{ r.capitalize(r.fprn(role)) }}](#{{r.fprn(role).lower().replace(' ','-')}})
     {% endif %}
   {% endfor %}
 {% endif %}
@@ -37,9 +37,9 @@
 * [Todo](#todo)
   {% for key , values in r.get_multi_type("todo") %}
     {% if key != "_unset_" %}
-  - [{{r.capitalize(key)}}](#todo_{{key}})
+  - [{{r.capitalize(key)}}](#{{key.lower().replace(' ','-')}})
     {% endif %}
   {% endfor %}
 {% endif %}
-  
+
 

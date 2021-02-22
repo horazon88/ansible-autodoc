@@ -1,18 +1,21 @@
-{% if r.has_items("action") %}## Actions:
+{% if r.has_items("action") %}## Actions
 
-{%  for role in r.get_roles(False) %}
-  {% if r.get_type("action",role)  %}
-### <a name="role_{{r.fprn(role)}}"></a>{{ r.capitalize(r.fprn(role)) }}
-  {% endif %}
-{##}
-  {% for key, values in r.get_multi_type("action",role) %}
-* {{ r.capitalize(key) }}  
-  {% for item in values %}
+    {%  for role in r.get_roles(False) %}
+        {% if r.get_type("action",role)  %}
+### {{ r.capitalize(r.fprn(role)) }}
+
+        {% endif %}
+        {% for key, values in r.get_multi_type("action",role) %}
+* {{ r.capitalize(key) }}
+            {% for item in values %}
+                {% if item.desc != "" %}
   - {{ item.desc }}{% if role == "_ansible_playbook_" %} ({{ item.file }}){% endif %}
+                {% else %}
+                    {% if role == "_ansible_playbook_" %}  - ({{ item.file }}){% endif %}
+                {% endif %}
 
-  {% endfor %}
-  {% endfor %}
+            {% endfor %}
+        {% endfor %}
 
-{%  endfor %}
-
+    {%  endfor %}
 {% endif %}
